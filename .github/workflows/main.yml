@@ -1,7 +1,8 @@
-name: sixhour6
+name: sixhour-09
 on:
   schedule:
-    - cron: '37 18,2,10 * * *'
+    - cron: '5 1 * * 1'  # 每周一（UTC时间周日23点）运行，对应北京时间周一早上7点
+  workflow_dispatch:  # 允许手动触发
 jobs:
   build:
     runs-on: windows-latest
@@ -16,12 +17,10 @@ jobs:
       run: Expand-Archive ngrok.zip
 
     - name: Auth ngrok
-      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
-      env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      run: .\ngrok\ngrok.exe authtoken 2cT6ca1FewfZEjNGMRKYwFWLvRb_2bhtAWzQT9cWBWEXMFKBj
 
     - name: Enable TS
-      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
 
     - name: Enable RDP
       run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
